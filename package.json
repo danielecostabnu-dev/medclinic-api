@@ -1,11 +1,11 @@
 {
   "name": "medclinic-api",
-    "main": "index.js",
+  "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js"
-      },
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danielecostabnu-dev/medclinic-api.git"
@@ -20,7 +20,10 @@
   "homepage": "https://github.com/danielecostabnu-dev/medclinic-api#readme",
   "dependencies": {
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.23.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^1.1.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
