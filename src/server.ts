@@ -1,10 +1,12 @@
 import express from 'express';
 import 'dotenv/config';
 import { AppDataSource } from './config/database';
+import { userRoutes } from './routes/userRoutes';
 
 const app = express();
 
 app.use(express.json());
+app.use('/users', userRoutes);
 
 const port = Number(process.env.PORT) || 3000;
 
