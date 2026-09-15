@@ -4,6 +4,7 @@ import { AppDataSource } from './config/database';
 import { userRoutes } from './routes/userRoutes';
 import { authRoutes } from './routes/authRoutes';
 import { adminRoutes } from './routes/adminRoutes';
+import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
+app.use(errorHandler);
 
 const port = Number(process.env.PORT) || 3000;
 
