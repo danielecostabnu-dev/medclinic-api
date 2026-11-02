@@ -1,44 +1,80 @@
-import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
-interface TokenPayload {
-  sub: string;
-  role: string;
-}
+import { NextFunction, Request, Response } from 'express';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { UserRole } from '../entities/User';
+import { AppError } from '../errors/AppError';
 
 export interface AuthRequest extends Request {
   user?: {
     id: number;
-    role: string;
+    roles: UserRole[];
   };
 }
 
 export function authMiddleware(
   request: AuthRequest,
-  response: Response,
+  _response: Response,
   next: NextFunction,
-): Response | void {
-  const authHeader = request.headers.authorization;
+): void {
+  const header = request.headers.authorization;
 
-  if (!authHeader) {
-    return response.status(401).json({ message: 'Token não informado' });
+  if (!header || !/^Bearer \S+$/.test(header)) {
+    return next(new AppError(
+      'NAO_AUTENTICADO',
+      'Token não informado ou malformado.',
+    ));
   }
 
-  const [, token] = authHeader.split(' ');
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    return next(new Error('JWT_SECRET não configurado.'));
+  }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'medclinic_secret_2026',
-    ) as TokenPayload;
+    const token = header.substring(7);
+    const decoded = jwt.verify(token, secret);
+
+    if (
+      typeof decoded === 'string' ||
+      !isValidPayload(decoded)
+    ) {
+      throw new Error('Payload JWT inválido');
+    }
 
     request.user = {
       id: Number(decoded.sub),
-      role: decoded.role,
+      roles: decoded.roles,
     };
 
     next();
   } catch {
-    return response.status(401).json({ message: 'Token inválido' });
+    next(new AppError(
+      'NAO_AUTENTICADO',
+      'Token inválido ou expirado.',
+    ));
   }
+}
+
+function isValidPayload(
+  payload: JwtPayload,
+): payload is JwtPayload & {
+  sub: string;
+  roles: UserRole[];
+} {
+  const validRoles: readonly string[] = Object.values(UserRole);
+
+  return (
+    typeof payload.sub === 'string' &&
+    /^\d+$/.test(payload.sub) &&
+    Number.isSafeInteger(Number(payload.sub)) &&
+    Number(payload.sub) > 0 &&
+    Array.isArray(payload.roles) &&
+    payload.roles.length > 0 &&
+    payload.roles.every(
+      (role: unknown) =>
+        typeof role === 'string' &&
+        validRoles.includes(role),
+    )
+  );
 }

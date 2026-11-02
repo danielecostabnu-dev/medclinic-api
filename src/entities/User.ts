@@ -1,8 +1,13 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum UserRole {
-  ADMIN = 'Administrador',
-  ATTENDANT = 'Atendente',
+  ADMIN = 'admin',
+  SECRETARY = 'secretary',
+  DOCTOR = 'doctor',
 }
 
 @Entity('users')
@@ -10,19 +15,22 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 150 })
   name!: string;
 
-  @Column({ type: 'varchar', unique: true })
+  @Column({
+    type: 'varchar',
+    length: 255,
+    unique: true,
+  })
   email!: string;
 
   @Column({ type: 'varchar' })
   password!: string;
 
   @Column({
-    type: 'enum',
-    enum: UserRole,
-    default: UserRole.ATTENDANT,
+    type: 'text',
+    array: true,
   })
-  role!: UserRole;
+  roles!: UserRole[];
 }

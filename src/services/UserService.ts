@@ -1,12 +1,13 @@
 import bcrypt from 'bcrypt';
 import { userRepository } from '../repositories/UserRepository';
 import { User, UserRole } from '../entities/User';
+import { AppError } from '../errors/AppError';
 
 interface CreateUserData {
   name: string;
   email: string;
   password: string;
-  role?: UserRole;
+  roles: UserRole[];
 }
 
 export class UserService {
@@ -16,16 +17,22 @@ export class UserService {
     });
 
     if (existingUser) {
-      throw new Error('E-mail já cadastrado');
+      throw new AppError(
+        'EMAIL_JA_CADASTRADO',
+        'Este e-mail já está cadastrado.',
+      );
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
+    const hashedPassword = await bcrypt.hash(
+      data.password,
+      10,
+    );
 
     const user = userRepository.create({
       name: data.name,
       email: data.email,
       password: hashedPassword,
-      role: data.role ?? UserRole.ATTENDANT,
+      roles: data.roles,
     });
 
     return userRepository.save(user);
