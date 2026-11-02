@@ -4,6 +4,7 @@ import { AppDataSource } from './config/database';
 import { userRoutes } from './routes/userRoutes';
 import { authRoutes } from './routes/authRoutes';
 import { adminRoutes } from './routes/adminRoutes';
+import { patientRoutes } from './routes/patientRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
@@ -18,6 +19,7 @@ app.get('/api/v1/health', (_request, response) => {
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/patients', patientRoutes);
 
 // Tratamento centralizado de erros
 app.use(errorHandler);
