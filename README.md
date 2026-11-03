@@ -51,3 +51,41 @@ DB_USER=postgres
 DB_PASSWORD=sua_senha
 DB_NAME=medclinic
 JWT_SECRET=sua_chave_secreta
+
+
+## API publicada
+
+A MedClinic API está publicada no Render.
+
+URL pública:
+https://medclinic-api-fb4a.onrender.com
+
+Endpoint de saúde:
+GET /api/v1/health
+
+Autenticação:
+POST /api/v1/auth/login
+
+## Funcionalidades implementadas
+
+- Autenticação JWT.
+- Autorização baseada em perfis.
+- Cadastro e gerenciamento de pacientes.
+- PostgreSQL gerenciado no Neon com SSL.
+- Migrations com TypeORM.
+- Testes unitários automatizados com Vitest.
+- Validação de Pull Requests pelo GitHub Actions.
+
+## Testes
+
+npm test
+npm run test:cov
+npm run build
+
+A cobertura verificada dos serviços implementados foi
+superior a 80%.
+
+## Estado atual
+
+Os módulos de médicos, escalas, agendamentos e
+prontuários ainda não foram concluídos.
