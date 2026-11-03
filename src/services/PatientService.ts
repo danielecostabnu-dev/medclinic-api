@@ -1,10 +1,10 @@
 import { Patient } from '../entities/Patient';
-import { PatientRepository } from '../repositories/PatientRepository';
+import { IPatientRepository } from '../repositories/IPatientRepository';
 import { AppError } from '../errors/AppError';
 
 export class PatientService {
   constructor(
-    private readonly patientRepository: PatientRepository,
+    private readonly patientRepository: IPatientRepository,
   ) {}
 
   async create(name: string, cpf: string): Promise<Patient> {
