@@ -1,13 +1,19 @@
 import { Router } from 'express';
 import { authMiddleware } from '../middlewares/authMiddleware';
-import { adminMiddleware } from '../middlewares/roleMiddleware';
+import { authorizeRoles } from '../middlewares/roleMiddleware';
+import { UserRole } from '../entities/User';
 
 const adminRoutes = Router();
 
-adminRoutes.get('/ping', authMiddleware, adminMiddleware, (_request, response) => {
-  return response.status(200).json({
-    message: 'Acesso administrativo autorizado',
-  });
-});
+adminRoutes.get(
+  '/ping',
+  authMiddleware,
+  authorizeRoles(UserRole.ADMIN),
+  (_request, response) => {
+    return response.status(200).json({
+      message: 'Acesso administrativo autorizado',
+    });
+  },
+);
 
 export { adminRoutes };

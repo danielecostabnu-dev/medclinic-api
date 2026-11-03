@@ -1,11 +1,14 @@
 {
   "name": "medclinic-api",
   "main": "index.js",
-  "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
-  },
+ 
+"scripts": {
+  "dev": "tsx watch src/server.ts",
+  "build": "tsc",
+  "start": "node dist/server.js",
+  "test": "vitest run",
+  "test:cov": "vitest run --coverage"
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danielecostabnu-dev/medclinic-api.git"
@@ -32,7 +35,9 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.20.2",
+    "@vitest/coverage-v8": "^5.1.0",
     "tsx": "^4.23.13",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
   }
 }
