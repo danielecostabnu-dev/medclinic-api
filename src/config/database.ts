@@ -4,6 +4,8 @@ import { DataSource } from 'typeorm';
 
 import { User } from '../entities/User';
 import { Patient } from '../entities/Patient';
+import { Doctor } from '../entities/Doctor';
+import { CreateDoctors1793657767364 } from '../migrations/1793657767364-CreateDoctors';
 
 import { CreateUsers1793625739466 } from '../migrations/1793625739466-CreateUsers';
 import { CreatePatients1793657767363 } from '../migrations/1793657767363-CreatePatients';
@@ -31,10 +33,11 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   logging: false,
 
-  entities: [User, Patient],
+  entities: [User, Patient, Doctor],
 
   migrations: [
     CreateUsers1793625739466,
     CreatePatients1793657767363,
+    CreateDoctors1793657767364,
   ],
 });

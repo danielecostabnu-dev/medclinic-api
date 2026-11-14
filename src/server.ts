@@ -5,6 +5,7 @@ import { userRoutes } from './routes/userRoutes';
 import { authRoutes } from './routes/authRoutes';
 import { adminRoutes } from './routes/adminRoutes';
 import { patientRoutes } from './routes/patientRoutes';
+import { doctorRoutes } from './routes/doctorRoutes';
 import { errorHandler } from './middlewares/errorHandler';
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/patients', patientRoutes);
+app.use('/api/v1/doctors', doctorRoutes);
 
 // Tratamento centralizado de erros
 app.use(errorHandler);
