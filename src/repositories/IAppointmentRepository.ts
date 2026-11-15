@@ -9,4 +9,8 @@ export interface CreateAppointmentInput {
 
 export interface IAppointmentRepository {
   create(input: CreateAppointmentInput): Promise<Appointment>;
+
+  findById(id: number): Promise<Appointment | null>;
+
+  findDoctorIdByUserId(userId: number): Promise<number | null>;
 }

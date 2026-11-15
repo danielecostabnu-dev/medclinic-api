@@ -7,6 +7,7 @@ import { Doctor } from '../entities/Doctor';
 import { Patient } from '../entities/Patient';
 import { WorkSchedule } from '../entities/WorkSchedule';
 import { AppError } from '../errors/AppError';
+import { UserRole } from '../entities/User';
 import {
   CreateAppointmentInput,
   IAppointmentRepository,
@@ -184,4 +185,26 @@ export class AppointmentRepository
       return manager.save(Appointment, appointment);
     });
   }
+
+  async findById(id: number): Promise<Appointment | null> {
+    return AppDataSource.getRepository(Appointment).findOne({
+      where: { id },
+      relations: {
+        doctor: true,
+        patient: true,
+      },
+    });
+  }
+
+
+  async findDoctorIdByUserId(userId: number): Promise<number | null> {
+    const doctor = await AppDataSource.getRepository(Doctor).findOne({
+      where: {
+        user: { id: userId },
+      },
+    });
+
+    return doctor?.id ?? null;
+  }
+
 }
