@@ -13,6 +13,10 @@ import { CreateWorkSchedules1793657767365 } from '../migrations/1793657767365-Cr
 import { CreateUsers1793625739466 } from '../migrations/1793625739466-CreateUsers';
 import { CreatePatients1793657767363 } from '../migrations/1793657767363-CreatePatients';
 
+import { Appointment } from '../entities/Appointment';
+import { CreateAppointments1793657767366 } from '../migrations/1793657767366-CreateAppointments';
+
+
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -37,12 +41,13 @@ export const AppDataSource = new DataSource({
   synchronize: false,
   logging: false,
 
-  entities: [User, Patient, Doctor, WorkSchedule],
+  entities: [User, Patient, Doctor, WorkSchedule, Appointment],
 
   migrations: [
     CreateUsers1793625739466,
     CreatePatients1793657767363,
     CreateDoctors1793657767364,
     CreateWorkSchedules1793657767365,
+    CreateAppointments1793657767366,
   ],
 });
