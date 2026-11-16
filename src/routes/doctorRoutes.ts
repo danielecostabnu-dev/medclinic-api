@@ -8,8 +8,13 @@ import { UserRole } from '../entities/User';
 import { WorkScheduleRepository } from '../repositories/WorkScheduleRepository';
 import { WorkScheduleService } from '../services/WorkScheduleService';
 import { WorkScheduleController } from '../controllers/WorkScheduleController';
+import { CalendarService } from '../services/CalendarService';
+import { CalendarController } from '../controllers/CalendarController';
 
 const doctorRoutes = Router();
+
+const calendarService = new CalendarService();
+const calendarController = new CalendarController(calendarService);
 
 const repository = new DoctorRepository();
 const service = new DoctorService(repository);
@@ -21,6 +26,10 @@ const scheduleController = new WorkScheduleController(scheduleService);
 // Todas as rotas exigem autenticação JWT.
 doctorRoutes.use(authMiddleware);
 // Substituir escala: somente administrador
+doctorRoutes.get(
+  '/:doctorId/calendar',
+  calendarController.findByDoctorId,
+);
 doctorRoutes.put(
   '/:doctorId/work-schedule',
   authorizeRoles(UserRole.ADMIN),
