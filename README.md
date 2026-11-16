@@ -1,91 +1,122 @@
-# MedClinic API
+# MedClinic API — Módulo 02 | SENAI
 
-API backend desenvolvida como Mini-Projeto Final do curso de Back-End.
+API REST desenvolvida em Node.js e TypeScript para gerenciamento de uma clínica médica, como parte do projeto de Back-End do SENAI.
 
-O projeto simula o módulo de gerenciamento de usuários de uma clínica, com cadastro, autenticação e autorização por perfil de acesso.
+O sistema permite administrar usuários, pacientes, médicos, escalas de atendimento, calendário, agendamentos e prontuários, com autenticação e controle de acesso por perfil.
 
-## Tecnologias
+## Tecnologias utilizadas
 
-- Node.js
-- TypeScript
+- Node.js e TypeScript
 - Express
-- PostgreSQL
-- TypeORM
-- bcrypt
-- JSON Web Token (JWT)
-- dotenv
+- PostgreSQL (Neon)
+- TypeORM e migrations
+- JWT e bcrypt
+- Vitest
+- Swagger / OpenAPI
+- Pino para logs estruturados
+- Dockerfile para preparação da execução em contêiner
+- Render para publicação da API
+- GitHub Actions
 
-## Funcionalidades
+## Funcionalidades implementadas
 
-- Cadastro de usuários
-- Senhas armazenadas com hash utilizando bcrypt
-- Autenticação por e-mail e senha
-- Geração de token JWT
-- Rota protegida para consulta do próprio usuário
-- Controle de acesso baseado em perfil (RBAC)
-- Perfis Administrador e Atendente
-- Rota administrativa exclusiva para Administrador
-- Tratamento centralizado de erros
-
-## Estrutura do projeto
-
-O projeto foi organizado em camadas:
-
-- `config`: configurações da aplicação e banco de dados
-- `controllers`: tratamento das requisições HTTP
-- `entities`: entidades do TypeORM
-- `middlewares`: autenticação, autorização e tratamento de erros
-- `repositories`: acesso aos dados
-- `routes`: definição das rotas
-- `services`: regras de negócio
-
-## Configuração do ambiente
-
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-
-```env
-PORT=3000
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=sua_senha
-DB_NAME=medclinic
-JWT_SECRET=sua_chave_secreta
-
+- Autenticação por e-mail e senha, com geração de token JWT.
+- Controle de acesso por perfil: administrador, secretária e médico.
+- Cadastro e gerenciamento de usuários.
+- Cadastro e gerenciamento de pacientes com CPF único.
+- Cadastro de médicos com CRM único.
+- Configuração de escalas e horários de atendimento.
+- Consulta ao calendário médico e horários disponíveis.
+- Agendamento e cancelamento de consultas.
+- Validação para evitar conflitos de agendamento.
+- Registro e consulta de prontuários médicos com controle de acesso.
+- Tratamento de erros e validações das regras de negócio.
+- Documentação interativa dos endpoints com Swagger.
+- Logs estruturados para acompanhamento das requisições.
 
 ## API publicada
 
 A MedClinic API está publicada no Render.
 
-URL pública:
+**URL da API:**
 https://medclinic-api-fb4a.onrender.com
 
-Endpoint de saúde:
-GET /api/v1/health
+**Documentação Swagger:**
+https://medclinic-api-fb4a.onrender.com/v1/docs/
 
-Autenticação:
-POST /api/v1/auth/login
+**Verificação de funcionamento:**
+https://medclinic-api-fb4a.onrender.com/api/v1/health
 
-## Funcionalidades implementadas
+**Autenticação:**
+`POST /api/v1/auth/login`
 
-- Autenticação JWT.
-- Autorização baseada em perfis.
-- Cadastro e gerenciamento de pacientes.
-- PostgreSQL gerenciado no Neon com SSL.
-- Migrations com TypeORM.
-- Testes unitários automatizados com Vitest.
-- Validação de Pull Requests pelo GitHub Actions.
+## Configuração do ambiente
 
-## Testes
+1. Instale o Node.js e as dependências do projeto.
+2. Configure o arquivo `.env` com as variáveis de ambiente necessárias, tomando como referência o `.env.example` do repositório.
+3. Utilize uma conexão PostgreSQL compatível.
+4. Configure uma chave secreta JWT segura.
+5. Execute as migrations antes de utilizar as funcionalidades que dependem do banco de dados.
 
-npm test
-npm run test:cov
+Não publique senhas, tokens ou dados reais de conexão no repositório.
+
+## Comandos do projeto
+
+Instalar dependências:
+
+```bash
+npm install
+```
+
+Compilar o TypeScript:
+
+```bash
 npm run build
+```
 
-A cobertura verificada dos serviços implementados foi
-superior a 80%.
+Executar testes:
 
-## Estado atual
+```bash
+npm test
+```
 
-Os módulos de médicos, escalas, agendamentos e
-prontuários ainda não foram concluídos.
+Verificar cobertura dos testes:
+
+```bash
+npm run test:cov
+```
+
+## Testes automatizados
+
+Foram executados **147 testes com sucesso**, distribuídos em 8 suítes.
+
+Cobertura apurada dos serviços incluídos na execução dos testes:
+
+- Instruções: 97,79%
+- Ramificações: 96,37%
+- Funções: 100%
+- Linhas: 97,76%
+
+Esses percentuais correspondem aos serviços avaliados na configuração de cobertura utilizada, não necessariamente a todo o código do repositório.
+
+## Docker
+
+O projeto contém `Dockerfile` e `.dockerignore` para preparação da execução em contêiner.
+
+A construção e execução da imagem Docker ainda não foram validadas localmente.
+
+## Organização do projeto
+
+O desenvolvimento foi acompanhado por meio de um quadro público no GitHub Projects, com as principais funcionalidades e entregas registradas.
+
+**Quadro público:**
+https://github.com/users/danielecostabnu-dev/projects/4/views/1
+
+**Branch com o código atualizado:**
+https://github.com/danielecostabnu-dev/medclinic-api/tree/feat/agendamentos
+
+## Observações
+
+O código atualizado desta entrega está disponível na branch `feat/agendamentos`.
+
+A aplicação utiliza PostgreSQL hospedado no Neon e está publicada no Render, com documentação Swagger disponível publicamente.
