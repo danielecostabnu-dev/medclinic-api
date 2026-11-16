@@ -207,4 +207,100 @@ export class AppointmentRepository
     return doctor?.id ?? null;
   }
 
+
+  async findAll(
+    filters: {
+      doctorId?: number;
+      patientId?: number;
+      status?: string;
+      from?: string;
+      to?: string;
+    },
+    page: number,
+    pageSize: number,
+  ): Promise<[Appointment[], number]> {
+    const query = AppDataSource.getRepository(Appointment)
+      .createQueryBuilder('appointment')
+      .leftJoinAndSelect('appointment.doctor', 'doctor')
+      .leftJoinAndSelect('appointment.patient', 'patient');
+
+    if (filters.doctorId !== undefined) {
+      query.andWhere('doctor.id = :doctorId', {
+        doctorId: filters.doctorId,
+      });
+    }
+
+    if (filters.patientId !== undefined) {
+      query.andWhere('patient.id = :patientId', {
+        patientId: filters.patientId,
+      });
+    }
+
+    if (filters.status !== undefined) {
+      query.andWhere('appointment.status = :status', {
+        status: filters.status,
+      });
+    }
+
+    if (filters.from !== undefined) {
+      query.andWhere(
+        "(appointment.\"startsAt\" AT TIME ZONE 'America/Sao_Paulo')::date >= CAST(:from AS date)",
+        { from: filters.from },
+      );
+    }
+
+    if (filters.to !== undefined) {
+      query.andWhere(
+        "(appointment.\"startsAt\" AT TIME ZONE 'America/Sao_Paulo')::date <= CAST(:to AS date)",
+        { to: filters.to },
+      );
+    }
+
+    return query
+      .orderBy('appointment.startsAt', 'ASC')
+      .addOrderBy('appointment.id', 'ASC')
+      .skip((page - 1) * pageSize)
+      .take(pageSize)
+      .getManyAndCount();
+  }
+
+ 
+  async updateStatus(
+    id: number,
+    expectedStatus: AppointmentStatus,
+    newStatus: AppointmentStatus,
+  ): Promise<Appointment | null> {
+    return AppDataSource.transaction(async (manager) => {
+      const appointment = await manager
+        .getRepository(Appointment)
+        .createQueryBuilder('appointment')
+        .setLock('pessimistic_write')
+        .where('appointment.id = :id', { id })
+        .getOne();
+
+      if (!appointment) {
+        return null;
+      }
+
+      if (appointment.status !== expectedStatus) {
+        throw new AppError(
+          'TRANSICAO_INVALIDA',
+          'O status da consulta foi alterado. Consulte novamente.',
+        );
+      }
+
+      appointment.status = newStatus;
+
+      await manager.save(Appointment, appointment);
+
+      return manager.findOne(Appointment, {
+        where: { id },
+        relations: {
+          doctor: true,
+          patient: true,
+        },
+      });
+    });
+  }
 }
+

@@ -19,3 +19,20 @@ appointmentRoutes.post(
   authorizeRoles(UserRole.ADMIN, UserRole.SECRETARY),
   controller.create,
 );
+
+appointmentRoutes.get(
+  '/',
+  controller.findAll,
+);
+
+appointmentRoutes.get(
+  '/:id',
+  controller.findById,
+);
+
+appointmentRoutes.patch(
+  '/:id/status',
+  controller.updateStatus,
+);
+
+
